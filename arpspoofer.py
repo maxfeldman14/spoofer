@@ -37,9 +37,9 @@ def spoof(victim, claimed, interval = 5, mode = 'request'):
 
 def main():
   parser = argparse.ArgumentParser(description='Send spoofed ARP packets.')
-  parser.add_argument('victim', metavar='V', type=string, nargs=1,
+  parser.add_argument('victim', metavar='V', nargs=1,
                     help='the victim of this attack')
-  parser.add_argument('claimed', metavar='C', type=string, nargs=1,
+  parser.add_argument('claimed', metavar='C', nargs=1,
                     help='the IP to associate with the attacker MAC')
   args = parser.parse_args()
   '''
@@ -50,8 +50,8 @@ def main():
   print("CTRL C to stop spoofing")
   # victim is the IP of the receiver of spoofed packets
   # claimed is the IP which is claimed by spoofed packets
-  victim = args.victim
-  claimed = args.claimed
+  victim = args.victim[0]
+  claimed = args.claimed[0]
   '''
   victim = sys.argv[1]
   claimed = sys.argv[2]
