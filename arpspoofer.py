@@ -22,7 +22,7 @@ def unsolicited(victim, claimed, interval):
   a.psrc = claimed
 
   # Send this packet with the given interval
-  send(a, interval)
+  send(a, loop = 1, interval)
 
 
 def spoof(victim, claimed, interval = 5, mode = 'request'):
