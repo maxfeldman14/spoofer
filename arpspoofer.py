@@ -24,12 +24,22 @@ def unsolicited(victim, claimed, interval):
   # Send this packet with the given interval
   send(a, loop = 1, interval)
 
+def all_hosts():
+  '''
+  Return the IPs of all hosts on the LAN
+  '''
+  # TODO: simple scan of network to see what hosts are up
+  # low priority- other tools can already do this easily (nmap)
+  hosts = []
+  return hosts
+
 
 def spoof(victim, claimed, interval = 5, mode = 'request'):
   '''
   Use scapy's builtin arpcachepoison to do spoofing attack,
   unless otherwise specified (ie. gratuitious replies).
   '''
+  # TODO: allow multiple victims at once
   if mode == 'request':
     print 'arpcachepoison'
     arpcachepoison(victim, claimed, interval)
